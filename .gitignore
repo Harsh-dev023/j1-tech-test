@@ -19,3 +19,12 @@ db.sqlite3
 # Capacitor
 android/
 ios/
+
+# Gradle
+.gradle/
+**/build/
+
+# IDEs
+.idea/
+.vscode/
+*.iml
