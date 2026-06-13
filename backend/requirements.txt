@@ -1,4 +1,5 @@
 django
 djangorestframework
-djangorestframework-simplejwt
+djangorestframework-simplejwt[token_blacklist]
 django-cors-headers
+mysqlclient

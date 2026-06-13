@@ -9,19 +9,12 @@ import {
 import { Preferences } from "@capacitor/preferences";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 
 function ProtectedRoute({ children }) {
-  const [checking, setChecking] = useState(true);
-  const [hasToken, setHasToken] = useState(false);
+  const { loading, user } = useAuth();
 
-  useEffect(() => {
-    Preferences.get({ key: "jwt_access" }).then(({ value }) => {
-      setHasToken(!!value);
-      setChecking(false);
-    });
-  }, []);
-
-  if (checking) {
+  if (loading) {
     return (
       <div style={{ padding: 40, textAlign: "center", color: "#888" }}>
         Loading…
@@ -29,7 +22,7 @@ function ProtectedRoute({ children }) {
     );
   }
 
-  return hasToken ? children : <Navigate to="/login" replace />;
+  return user ? children : <Navigate to="/login" replace />;
 }
 
 const appStyle = {
@@ -43,20 +36,22 @@ const appStyle = {
 export default function App() {
   return (
     <div style={appStyle}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Navigate to="/login" replace />} />
-          <Route path="/login" element={<Login />} />
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Navigate to="/login" replace />} />
+            <Route path="/login" element={<Login />} />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </div>
   );
 }

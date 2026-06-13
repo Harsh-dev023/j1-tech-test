@@ -28,3 +28,8 @@ ios/
 .idea/
 .vscode/
 *.iml
+
+# Ignore user uploaded docs and SQL dumps
+*.pdf
+*.sql
+*.docx
